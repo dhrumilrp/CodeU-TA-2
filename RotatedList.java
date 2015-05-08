@@ -8,12 +8,12 @@ public class RotatedList {
     public static boolean isRotation(List<Integer> list1, List<Integer> list2) {
         
         // STUDENT: PROVIDE IMPLEMENTATION
-    	if(list1.size() != list2.size()) return false;
-    	
-    	for(int i = 0; i < list1.size(); i++){
-    		if(list1.get(i) != list2.get(list2.size()-1-i)) return false;
-    	}
-    	return true;
+        if(list1.size() != list2.size()) return false;
+        
+        for(int i = 0; i < list1.size()/2; i++){
+            if(list1.get(i) != list2.get(list2.size()-1-i)) return false;
+        }
+        return true;
     }
 
     public static class Test_IsRotation {
@@ -32,10 +32,12 @@ public class RotatedList {
 
         public static void expectFailure(List<Integer> a, List<Integer> b) {
             // STUDENT: PROVIDE IMPLEMENTATION
+            if(!isRotation(a,b)) failCount++;
         }
 
         public static void expectSuccess(List<Integer> a, List<Integer> b) {
             // STUDENT: PROVIDE IMPLEMENTATION
+            if(isRotation(a,b)) successCount++;
         }
 
         private static void report(List<Integer> a, List<Integer> b, boolean got) {
@@ -74,7 +76,18 @@ public class RotatedList {
         Test_IsRotation.expectFailure(list1,list2);
 
         // STUDENT: ADD TEST CASES HERE
-
+        list1 = new LinkedList<Integer>(Arrays.asList(1,2,3,4));
+        list2 = new LinkedList<Integer>(Arrays.asList(4,3,2,1));
+        Test_IsRotation.expectSuccess(list1,list2);
+        list1 = new LinkedList<Integer>(Arrays.asList(1,2,3,4,1,1,1,1,1));
+        list2 = new LinkedList<Integer>(Arrays.asList(1,1,1,1,1,4,99,2,1));
+        Test_IsRotation.expectFailure(list1,list2);
+        list1 = new LinkedList<Integer>(Arrays.asList(1,2,3,4,5,6,7,8,9,10,11,12));
+        list2 = new LinkedList<Integer>(Arrays.asList(12,11,10,9,8,7,99,5,4,3,2,1));
+        Test_IsRotation.expectFailure(list1,list2);
+        
+        
+        
         // Check performance                                                                              
         int N = 10000;
         Integer[] a1 = new Integer[N];
