@@ -1,9 +1,8 @@
 import java.util.HashMap;
 
 class AncestorDatabase {
-	HashMap<String, AncestorTree> family = new HashMap<String, AncestorTree>();
-
-	class AncestorTree{
+	static HashMap<String, AncestorTree> family = new HashMap<String, AncestorTree>();
+	static class AncestorTree{
 		String name;
 		String mom;
 		String dad;
@@ -15,10 +14,9 @@ class AncestorDatabase {
 		}
 	}
 	
-	void addPerson(String one, String two, String three){
+	static void addPerson(String one, String two, String three){
 		//addPerson("John", "Mary", "Tony")
 		//addPerson("Bob", "Mary", "Tony")
-	
 		//AncestorTree a = new AncestorTree(one, two, three);
 		
 		if(!family.containsKey(one)){
@@ -26,45 +24,59 @@ class AncestorDatabase {
 		}
 	}
 	
-	boolean isAncestor(String a, String b){
+	static boolean isAncestor(String a, String b){
 		//I will finish this later and send it to you via Github
-
-		if(!family.containsKey(a) || !family.containsKey(b)) return false;
-
-		while(family.get(b).name != null){
-			if(b.equals(a)) return true;
+		if(!family.containsKey(b) || a.equals(b)) return false;
+		
+		String temp = b;
+		while(family.containsKey(b)){
+			if(b.equals(a) || family.get(b).mom.equals(a) ||
+					family.get(b).dad.equals(a)) return true;
 			b = family.get(b).dad;
 		}
-
-		while(family.get(b).name != null){
-			if(b.equals(a)) return true;
-			b = family.get(b).mom;
+		
+		while(family.containsKey(temp)){
+			if(temp.equals(a) || family.get(temp).mom.equals(a) ||
+					family.get(temp).dad.equals(a)) return true;
+			temp = family.get(temp).mom;
 		}
-
+	
 		return false;
-
 	}
 	
-	boolean isDescendent(String a, String b){
+	static boolean isDescendent(String a, String b){
 		//I will finish this later and send it to you via Github
-		if(!family.containsKey(a) || !family.containsKey(b)) return false;
-		
-		while(family.get(a).name != null){
-			if(a.equals(b)) return true;
+		if(!family.containsKey(a) || a.equals(b)) return false;
+		String temp = a;
+		while(family.containsKey(a)){
+			if(a.equals(b) || family.get(a).mom.equals(b) ||
+					family.get(a).dad.equals(b)) return true;
 			a = family.get(a).dad;
 		}
-
-		while(family.get(a).name != null){
-			if(a.equals(b)) return true;
-			a = family.get(a).mom;
+		
+		while(family.containsKey(temp)){
+			if(temp.equals(b) || family.get(temp).mom.equals(b) ||
+					family.get(temp).dad.equals(b)) return true;
+			temp = family.get(temp).mom;
 		}
-
+		
 		return false;
 	}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		addPerson("John", "Mary", "Tony");
+		addPerson("Tony", "Molly", "Bob");
+		addPerson("Mary", "Sammy", "Ray");
 
+		System.out.println(isDescendent("John", "Ray"));
+		System.out.println(isDescendent("John", "Fake"));
+		System.out.println(isDescendent("John", "Molly"));
+		System.out.println(isDescendent("John", "Bob"));
+		
+		System.out.println(isAncestor("Sammy", "Mary"));
+		System.out.println(isAncestor("Ray", "John"));
+		System.out.println(isAncestor("John", "Molly"));
+		System.out.println(isAncestor("Bob", "John"));
 	}
-
 }
